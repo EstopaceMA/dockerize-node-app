@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to Docker Hub
+name: Build, Push and Deploy to Azure Container Apps
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   push_to_dockerhub:
+    name: Build and Push to Docker Hub
     runs-on: ubuntu-latest
 
     steps:
@@ -36,3 +37,21 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy_to_azure:
+    name: Deploy to Azure Container Apps
+    needs: push_to_dockerhub
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          containerAppName: ${{ secrets.AZURE_CONTAINER_APP_NAME }}
+          resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          imageToDeploy: ${{ secrets.DOCKERHUB_USERNAME }}/dockerize-node-app:main
