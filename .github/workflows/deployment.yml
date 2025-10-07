@@ -54,7 +54,7 @@ jobs:
           az containerapp up \
             --name ${{ secrets.AZURE_CONTAINER_APP_NAME }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --environment ${{ secrets.AZURE_ENVIRONMENT }} \
+            --location westus2 \
             --image ${{ secrets.DOCKERHUB_USERNAME }}/dockerize-node-app:main
 
       - name: Enable ingress
