@@ -3,7 +3,7 @@ const app = express();
 const PORT = 3000;
 
 app.get("/", (req, res) => {
-  res.send("Hello, Dockerized Node.js App!");
+  res.send("Hello, Microsoft Azure Community Philippines!!!");
 });
 
 app.listen(PORT, () => {
